@@ -7,7 +7,7 @@ import { Phone, PhoneOff, Mic, MicOff, Video, VideoOff, Volume2, Volume1, Volume
 import { Avatar } from "@components/ui/Avatar";
 import { toast } from "sonner";
 // Helper component to bind a MediaStream to a video element
-function VideoStream({ stream, isLocal = false }: { stream: MediaStream, isLocal?: boolean }) {
+function  VideoStream({ stream, isLocal = false }: { stream: MediaStream, isLocal?: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {

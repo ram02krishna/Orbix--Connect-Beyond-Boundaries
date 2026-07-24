@@ -1,5 +1,3 @@
-// all the socket event names used in the app
-// keeping them in one place so client and server don't go out of sync
 export const SOCKET_EVENTS = {
   CONNECTION: "connection",
   DISCONNECT: "disconnect",

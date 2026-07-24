@@ -16,10 +16,8 @@ import { errorHandler } from "./middleware/error.js";
 
 const app = express();
 
-// needed for rate limiting + IP detection behind a proxy
 app.set("trust proxy", 1);
 
-// security headers
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -42,7 +40,6 @@ app.use(
   })
 );
 
-// logging (skip in test env)
 if (env.NODE_ENV !== "test") {
   app.use(morgan(env.NODE_ENV === "development" ? "dev" : "combined"));
 }
@@ -66,7 +63,7 @@ const globalLimiter = rateLimit({
 
 app.use("/api", globalLimiter);
 
-// stricter limiter just for auth endpoints
+// stricter limiter for auth endpoints
 const authLimiter = rateLimit({
   windowMs: 30 * 1000,
   limit: 5000,

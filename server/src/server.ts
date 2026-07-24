@@ -28,15 +28,15 @@ initializeSockets(io);
 async function startServer() {
   try {
     await prisma.$connect();
-    console.log("✅ Database connected");
+    console.log("Database connected");
 
     httpServer.listen(PORT, () => {
-      console.log(`🚀 Orbix server running on port ${PORT} (${env.NODE_ENV})`);
-      console.log(`   Client: ${env.CLIENT_URL}`);
-      console.log(`   Health: http://localhost:${PORT}/health`);
+      console.log(`Orbix server running on port ${PORT} (${env.NODE_ENV})`);
+      console.log(`Client: ${env.CLIENT_URL}`);
+      console.log(`Health: http://localhost:${PORT}/health`);
     });
   } catch (error) {
-    console.error("❌ Failed to start server:", error);
+    console.error("Failed to start server:", error);
     await prisma.$disconnect();
     process.exit(1);
   }

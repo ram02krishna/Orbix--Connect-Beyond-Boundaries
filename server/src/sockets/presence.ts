@@ -99,7 +99,6 @@ export async function getOnlineStatuses(
         : ((await redis.get(`user:last_seen:${id}`)) as string | null);
 
       if (!isOnline && !lastSeen) {
-        // fallback to user's updatedAt if Redis has no record
         const user = await prisma.user.findUnique({
           where: { id },
           select: { updatedAt: true },

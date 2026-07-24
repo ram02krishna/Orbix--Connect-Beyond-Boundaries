@@ -15,7 +15,6 @@ export async function sendNewMessage(req: Request, res: Response) {
     attachments
   );
 
-  // broadcast to all members of this chat
   const chat = await prisma.chat.findUnique({
     where: { id: req.params.chatId as string },
     select: { members: { select: { userId: true } } },

@@ -69,7 +69,7 @@ export function decryptMessage(ciphertext: string | null | undefined): string {
   }
 }
 
-// generates a secure random hex token (for invite links, etc.)
+// generates a secure random hex token (for invite links etc.)
 export function generateSecureToken(bytes = 32): string {
   return crypto.randomBytes(bytes).toString("hex");
 }
