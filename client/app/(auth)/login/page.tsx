@@ -127,6 +127,11 @@ export default function LoginPage() {
             Sign Up
           </Link>
         </p>
+        <div className="mt-4 text-center">
+          <Link href="/" className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors">
+            Return to Home
+          </Link>
+        </div>
       </form>
     </AuthCard>
   );

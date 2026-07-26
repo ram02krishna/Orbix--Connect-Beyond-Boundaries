@@ -4,7 +4,7 @@ import * as React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { MessageBubble } from "./MessageBubble";
-import { MessageSquareOff } from "lucide-react";
+import { MessageCircleOff } from "lucide-react";
 import { useChatStore } from "@hooks/useChatStore";
 
 interface MessageListProps {
@@ -74,7 +74,7 @@ export function MessageList({
       <div className="flex-1 flex flex-col items-center justify-center text-zinc-500 gap-2 p-6 select-none">
         <div className="bg-white dark:bg-zinc-900 px-8 py-7 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col items-center relative overflow-hidden group">
           <div className="h-16 w-16 bg-zinc-100 dark:bg-zinc-600/10 rounded-full flex items-center justify-center mb-4">
-            <MessageSquareOff size={32} className="text-zinc-600 dark:text-zinc-500" />
+            <MessageCircleOff size={32} className="text-zinc-600 dark:text-zinc-500" />
           </div>
           <p className="text-base font-bold text-[#111b21] dark:text-[#e9edef] mb-1.5">No messages yet</p>
           <p className="text-base text-[#667781] dark:text-[#8696a0] text-center max-w-[240px] leading-relaxed">

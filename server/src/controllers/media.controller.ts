@@ -79,14 +79,14 @@ export async function downloadFile(req: Request, res: Response) {
     if (contentLength) res.setHeader("Content-Length", contentLength);
 
     if (response.body) {
-      const { Readable } = await import("stream");
-      const nodeReadable = Readable.fromWeb(response.body as any);
-      nodeReadable.pipe(res);
+      const buffer = await response.arrayBuffer();
+      res.send(Buffer.from(buffer));
     } else {
       res.end();
     }
   } catch (err: any) {
     console.error("Download proxy error:", err);
-    throw new ApiError(500, "Failed to download file from storage proxy");
+    if (err instanceof ApiError) throw err;
+    throw new ApiError(500, "Failed to download file from storage proxy: " + (err.message || err));
   }
 }

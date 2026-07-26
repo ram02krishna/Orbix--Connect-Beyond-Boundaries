@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Search, LogOut, UserPlus, MessageSquare, X, CircleDot, ChevronLeft, Plus, Users, Camera, Video, Mic, FileText } from "lucide-react";
+import { Search, LogOut, UserPlus, MessageCircle, X, CircleDot, ChevronLeft, Plus, Users, Camera, Video, Mic, FileText } from "lucide-react";
 import { useAuthStore } from "@hooks/useAuthStore";
 import { useChatStore } from "@hooks/useChatStore";
 import { useSocketStore } from "@hooks/useSocketStore";
@@ -29,7 +29,7 @@ const ChatItem = React.memo(function ChatItem({
   isOnline: boolean;
   isTyping: boolean;
   preview: any;
-  onClick: () => void;
+  onClick: (id: string) => void;
   formatTime: (dateStr: string) => string;
 }) {
   const firstName = (name: any) => {
@@ -39,7 +39,7 @@ const ChatItem = React.memo(function ChatItem({
 
   return (
     <div
-      onClick={onClick}
+      onClick={() => onClick(chat.id)}
       className={`flex items-center gap-3.5 px-4.5 py-3.5 cursor-pointer transition-all duration-200 rounded-xl border select-none ${
         isSelected
           ? "bg-zinc-100 dark:bg-zinc-800 border-blue-200 dark:border-zinc-700 text-zinc-950 dark:text-white"
@@ -136,16 +136,18 @@ export function Sidebar() {
 
   // Removed handleTogglePin and handleToggleArchive
 
-  const chatsToShow = chats
-    .filter((chat) => {
-      if (filterTab === "groups") return chat.type === "GROUP";
-      return true;
-    })
-    .sort((a, b) => {
-      const aTime = a.lastMessage?.createdAt || a.updatedAt;
-      const bTime = b.lastMessage?.createdAt || b.updatedAt;
-      return new Date(bTime).getTime() - new Date(aTime).getTime();
-    });
+  const chatsToShow = useMemo(() => {
+    return chats
+      .filter((chat) => {
+        if (filterTab === "groups") return chat.type === "GROUP";
+        return true;
+      })
+      .sort((a, b) => {
+        const aTime = a.lastMessage?.createdAt || a.updatedAt;
+        const bTime = b.lastMessage?.createdAt || b.updatedAt;
+        return new Date(bTime).getTime() - new Date(aTime).getTime();
+      });
+  }, [chats, filterTab]);
 
   // Trigger search when query is typed
   useEffect(() => {
@@ -285,37 +287,39 @@ export function Sidebar() {
         <div className="px-4 h-[60px] flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 relative z-10">
           {/* User info */}
           <div
-            className="flex items-center gap-3 cursor-pointer group rounded-full p-1 -m-1 transition-all duration-200"
+            className="flex items-center gap-3 cursor-pointer group rounded-xl p-2 -ml-2 transition-all duration-200 hover:bg-zinc-100 dark:hover:bg-zinc-800"
             onClick={() => router.push("/profile")}
           >
             <div className="relative">
               <Avatar src={user?.avatarUrl} name={user?.name} size="sm" />
-              <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-zinc-600 ring-2 ring-[#f0f2f5]/70 dark:ring-[#202c33]/70" />
+              <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 ring-2 ring-white dark:ring-zinc-900" />
             </div>
-            <div className="hidden sm:block">
-              <p className="text-lg font-bold truncate max-w-[150px] text-zinc-900 dark:text-[#e9edef] transition-colors">
+            <div className="hidden sm:flex flex-col justify-center">
+              <p className="text-base font-bold leading-tight truncate max-w-[140px] text-zinc-900 dark:text-zinc-100 transition-colors group-hover:text-brand-primary">
                 {user?.name ? firstName(user.name) : ""}
               </p>
-              <p className="text-base text-zinc-400 dark:text-zinc-500 font-medium">@{user?.username}</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium leading-tight mt-0.5">
+                @{user?.username}
+              </p>
             </div>
           </div>
 
           {/* Action icons */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setShowGroupModal(true)}
-              className="p-2.5 sm:p-2 rounded-full text-[#54656f] dark:text-[#aebac1] transition-all cursor-pointer active:bg-zinc-200/50 dark:active:bg-zinc-700/30"
+              className="p-2 rounded-full text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-all cursor-pointer"
               title="New Group"
             >
-              <Users size={18} />
+              <Users size={20} />
             </button>
 
             <button
               onClick={handleLogout}
-              className="p-2.5 sm:p-2 rounded-full text-[#54656f] dark:text-[#aebac1] transition-all cursor-pointer active:bg-zinc-200/50 dark:active:bg-zinc-700/30"
+              className="p-2 rounded-full text-zinc-500 dark:text-zinc-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10 dark:hover:text-red-400 transition-all cursor-pointer"
               title="Logout"
             >
-              <LogOut size={18} />
+              <LogOut size={20} />
             </button>
           </div>
         </div>
@@ -461,7 +465,7 @@ export function Sidebar() {
                     isOnline={isOnline}
                     isTyping={isTyping}
                     preview={preview}
-                    onClick={() => handleChatClick(chat.id)}
+                    onClick={handleChatClick}
                     formatTime={formatTime}
                   />
                 );

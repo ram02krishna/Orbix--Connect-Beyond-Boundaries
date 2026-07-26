@@ -14,7 +14,7 @@ export interface MessageBubbleProps {
   searchQuery?: string;
 }
 
-export const MessageBubble = React.memo(function MessageBubble({ message, searchQuery }: MessageBubbleProps) {
+export function MessageBubble({ message, searchQuery }: MessageBubbleProps) {
   const user = useAuthStore((state) => state.user);
   
   // Lightbox viewer states
@@ -61,19 +61,14 @@ export const MessageBubble = React.memo(function MessageBubble({ message, search
         <div
           className={cn(
             isMediaOnly
-              ? "p-1 rounded-2xl relative border shadow-[0_2px_4px_rgba(0,0,0,0.04)] overflow-hidden"
-              : "px-4 py-2.5 rounded-2xl relative border text-base sm:text-base leading-normal font-sans font-normal tracking-wide break-words whitespace-pre-wrap shadow-[0_2px_4px_rgba(0,0,0,0.04)]",
+              ? "p-1 rounded-lg relative border overflow-hidden"
+              : "px-4 py-2.5 rounded-lg relative border text-base sm:text-base leading-normal font-sans font-normal tracking-wide break-words whitespace-pre-wrap shadow-sm",
             isSelf
-              ? "bg-zinc-600 text-white rounded-tr-none"
-              : "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-tl-none",
+              ? "bg-blue-500 text-white border-blue-600 rounded-tr-none"
+              : "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-600 rounded-tl-none",
             message.isSending && "opacity-70",
-            message.hasFailed && "border-red-500/30 bg-red-500/5 dark:bg-red-950/5 text-red-650 dark:text-red-400"
+            message.hasFailed && "border-red-500/30 bg-red-50 text-red-500 dark:bg-red-900/10"
           )}
-          style={{
-            borderRadius: isSelf
-              ? "var(--bubble-radius, 16px) var(--bubble-radius, 16px) 0px var(--bubble-radius, 16px)"
-              : "var(--bubble-radius, 16px) var(--bubble-radius, 16px) var(--bubble-radius, 16px) 0px"
-          }}
         >
           {message.attachments && message.attachments.length > 0 && (
             <div className="space-y-2 mb-2 select-none">
@@ -307,24 +302,4 @@ export const MessageBubble = React.memo(function MessageBubble({ message, search
       )}
     </div>
   );
-}, (prevProps, nextProps) => {
-  if (prevProps.searchQuery !== nextProps.searchQuery) return false;
-
-  const prevMsg = prevProps.message;
-  const nextMsg = nextProps.message;
-  if (prevMsg.id !== nextMsg.id) return false;
-  if (prevMsg.content !== nextMsg.content) return false;
-  if (prevMsg.status !== nextMsg.status) return false;
-  if (prevMsg.isSending !== nextMsg.isSending) return false;
-  if (prevMsg.hasFailed !== nextMsg.hasFailed) return false;
-  
-  const prevReceiptsCount = prevMsg.receipts?.length || 0;
-  const nextReceiptsCount = nextMsg.receipts?.length || 0;
-  if (prevReceiptsCount !== nextReceiptsCount) return false;
-  
-  const prevReadCount = prevMsg.receipts?.filter((r:any) => r.readAt).length || 0;
-  const nextReadCount = nextMsg.receipts?.filter((r:any) => r.readAt).length || 0;
-  if (prevReadCount !== nextReadCount) return false;
-
-  return true;
-});
+}

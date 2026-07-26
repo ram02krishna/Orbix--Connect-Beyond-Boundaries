@@ -112,7 +112,7 @@ export function MediaLightbox({ isOpen, onClose, mediaUrl, mediaType, fileName =
               </div>
             )}
             <iframe
-              src={`https://docs.google.com/gview?url=${encodeURIComponent(mediaUrl)}&embedded=true`}
+              src={mediaUrl}
               onLoad={() => setIframeLoading(false)}
               className="w-full h-full border-none rounded-xl bg-white select-text"
               title={fileName}

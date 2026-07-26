@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MessageSquare, Users, FileText, ArrowRight, Github } from "lucide-react";
+import { MessageCircle, Users, FileText, ArrowRight, Github } from "lucide-react";
 import { Button } from "@components/ui/Button";
 
 export default function LandingPage() {
@@ -53,7 +53,7 @@ export default function LandingPage() {
         <div className="grid sm:grid-cols-3 gap-8 mt-32 max-w-5xl mx-auto text-left">
           <div className="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-brand-primary/50 transition-colors">
             <div className="w-12 h-12 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center mb-4">
-              <MessageSquare size={24} />
+              <MessageCircle size={24} />
             </div>
             <h3 className="text-xl font-bold mb-2">Real-time Messaging</h3>
             <p className="text-zinc-600 dark:text-zinc-400">Instant message delivery powered by WebSockets. See typing indicators and read receipts just like a professional app.</p>

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { X, Image, FileText, Download, Plus, Trash2, Edit2, Check, Loader2, LogOut, Search, Star, Play } from "lucide-react";
+import { X, Image, FileText, Download, Plus, Trash2, Edit2, Check, Loader2, LogOut, Search, Play } from "lucide-react";
 import { Avatar } from "@components/ui/Avatar";
 import { Button } from "@components/ui/Button";
 import { useChatStore } from "@hooks/useChatStore";
@@ -27,38 +27,10 @@ export function ProfilePanel({ onClose, chatId }: ProfilePanelProps) {
   // Find target chat
   const chat = chats.find((c) => c.id === chatId);
 
-  // Tabs: members (groups only), media, files, starred
-  const [activeTab, setActiveTab] = useState<"members" | "media" | "files" | "starred">(
+  // Tabs: members (groups only), media, files
+  const [activeTab, setActiveTab] = useState<"members" | "media" | "files">(
     chat?.type === "GROUP" ? "members" : "media"
   );
-
-  const [starredMessages, setStarredMessages] = useState<any[]>([]);
-
-  const loadStarredMessages = () => {
-    const list: any[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith("starred:")) {
-        try {
-          const item = JSON.parse(localStorage.getItem(key) || "");
-          if (item && item.chatId === chatId) {
-            list.push(item);
-          }
-        } catch (e) {
-          console.error("Error parsing starred message:", e);
-        }
-      }
-    }
-    setStarredMessages(list);
-  };
-
-  useEffect(() => {
-    loadStarredMessages();
-    window.addEventListener("starred-messages-updated", loadStarredMessages);
-    return () => {
-      window.removeEventListener("starred-messages-updated", loadStarredMessages);
-    };
-  }, [chatId]);
 
   // Group editing state
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -221,9 +193,9 @@ export function ProfilePanel({ onClose, chatId }: ProfilePanelProps) {
   };
 
   return (
-    <div className="w-full sm:w-80 flex flex-col h-full ios-glass-panel border-l border-[#e9edef]/40 dark:border-white/5 select-none text-zinc-900 dark:text-[#e9edef] relative z-20 transition-colors duration-300">
+    <div className="w-full sm:w-80 flex flex-col h-full bg-white dark:bg-gray-800 border-l border-gray-300 dark:border-gray-700 select-none text-gray-900 dark:text-gray-100 relative z-20">
       {/* Header */}
-      <div className="p-4 flex items-center justify-between border-b border-[#e9edef]/40 dark:border-white/5 bg-white/30 dark:bg-black/15 backdrop-blur-md">
+      <div className="p-4 flex items-center justify-between border-b border-gray-300 dark:border-gray-700">
         <h3 className="text-base font-bold text-[#111b21] dark:text-[#e9edef]">Contact Details</h3>
         <button
           onClick={onClose}
@@ -234,7 +206,7 @@ export function ProfilePanel({ onClose, chatId }: ProfilePanelProps) {
       </div>
 
       {/* Profile Info */}
-      <div className="p-4 flex flex-col items-center text-center border-b border-[#e9edef]/30 dark:border-white/5">
+      <div className="p-4 flex flex-col items-center text-center border-b border-gray-300 dark:border-gray-700">
         <Avatar
           src={partner.avatarUrl}
           name={partner.name}
@@ -305,7 +277,7 @@ export function ProfilePanel({ onClose, chatId }: ProfilePanelProps) {
       </div>
 
       {/* Media / Files / Members Tabs */}
-      <div className="flex border-b border-[#e9edef] dark:border-[#222e35]/30 text-base font-semibold overflow-x-auto no-scrollbar">
+      <div className="flex border-b border-gray-300 dark:border-gray-700 text-base font-semibold overflow-x-auto no-scrollbar">
         {chat.type === "GROUP" && (
           <button
             onClick={() => setActiveTab("members")}
@@ -337,16 +309,6 @@ export function ProfilePanel({ onClose, chatId }: ProfilePanelProps) {
           }`}
         >
           Files ({documentFiles.length})
-        </button>
-        <button
-          onClick={() => setActiveTab("starred")}
-          className={`px-3 py-3 text-center border-b-2 flex-shrink-0 cursor-pointer transition-colors ${
-            activeTab === "starred"
-              ? "border-[#0284c7] text-[#0284c7] dark:border-blue-500 dark:text-blue-400"
-              : "border-transparent text-[#667781] hover:text-[#111b21] dark:text-zinc-400 dark:hover:text-[#e9edef]"
-          }`}
-        >
-          Starred ({starredMessages.length})
         </button>
       </div>
 
@@ -553,42 +515,6 @@ export function ProfilePanel({ onClose, chatId }: ProfilePanelProps) {
           )
         )}
 
-        {/* Starred Messages Tab */}
-        {activeTab === "starred" && (
-          starredMessages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40 text-zinc-450 dark:text-zinc-500">
-              <Star size={28} className="mb-2 opacity-40 text-amber-500 fill-amber-500" />
-              <span className="text-base font-medium">No starred messages</span>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {starredMessages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className="p-3 rounded-xl border border-zinc-200/60 dark:border-white/5 bg-zinc-50 dark:bg-white/5 relative group select-text"
-                >
-                  <div className="flex items-center justify-between gap-2 mb-1 text-base font-bold text-zinc-400">
-                    <span className="text-blue-650 dark:text-blue-400">{msg.senderName}</span>
-                    <span>{new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
-                  </div>
-                  <p className="text-base text-zinc-800 dark:text-zinc-200 break-words line-clamp-3 select-all">
-                    {msg.content || (msg.type !== "TEXT" ? `[${msg.type}]` : "")}
-                  </p>
-                  <button
-                    onClick={() => {
-                      localStorage.removeItem(`starred:${msg.id}`);
-                      window.dispatchEvent(new Event("starred-messages-updated"));
-                    }}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-800 text-amber-500 transition-all cursor-pointer"
-                    title="Unstar message"
-                  >
-                    <Star size={12} fill="currentColor" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )
-        )}
       </div>
     </div>
   );
