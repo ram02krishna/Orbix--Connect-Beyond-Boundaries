@@ -18,7 +18,7 @@ Orbix is a full-stack real-time chat application designed to provide seamless an
 
 ### Privacy & Security
 - **Secure Authentication**: Robust JWT-based authentication using generic security tokens.
-- **Email Verification**: Ensure account authenticity via custom verification codes (powered by `Nodemailer` & `Redis`).
+- **Email Verification**: Ensure account authenticity via custom verification codes (powered by `Resend` & `Redis`).
 - **Data Protection**: Deterministic encryption for user emails, keeping identity searchable but secure in PostgreSQL.
 
 ---
@@ -96,7 +96,7 @@ cd Orbix---Connect-Beyond-Boundaries
    - `COOKIE_SECRET` (Cookie signing secret)
    - Cloudinary credentials (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`)
    - Redis credentials (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`)
-   - Email/SMTP credentials (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`)
+   - Email credentials (`RESEND_API_KEY`, `EMAIL_FROM`)
    - Rate limiting options (`RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX_REQUESTS`)
 4. Initialize the database schema:
    ```bash

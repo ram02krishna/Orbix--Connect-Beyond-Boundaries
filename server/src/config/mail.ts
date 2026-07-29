@@ -1,15 +1,7 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { env } from "./env.js";
 
-export const transporter = nodemailer.createTransport({
-  host: env.SMTP_HOST,
-  port: Number(env.SMTP_PORT),
-  secure: Number(env.SMTP_PORT) === 465, // true for port 465, false for 587
-  auth: {
-    user: env.SMTP_USER,
-    pass: env.SMTP_PASS,
-  },
-});
+export const resend = new Resend(env.RESEND_API_KEY);
 
 /**
  * Send an email.
@@ -31,11 +23,11 @@ export async function sendMail({
   html?: string;
   text?: string;
 }) {
-  return transporter.sendMail({
-    from: env.SMTP_FROM,
+  return resend.emails.send({
+    from: env.EMAIL_FROM,
     to,
     subject,
-    html,
+    html: html || "",
     text,
   });
 }

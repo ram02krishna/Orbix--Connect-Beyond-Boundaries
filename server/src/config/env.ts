@@ -19,11 +19,8 @@ const envSchema = z.object({
 
   COOKIE_SECRET: z.string().min(32),
 
-  SMTP_HOST: z.string(),
-  SMTP_PORT: z.string().default("587"),
-  SMTP_USER: z.string().email(),
-  SMTP_PASS: z.string(),
-  SMTP_FROM: z.string(),
+  RESEND_API_KEY: z.string(),
+  EMAIL_FROM: z.string(),
 
   CLOUDINARY_CLOUD_NAME: z.string(),
   CLOUDINARY_API_KEY: z.string(),
