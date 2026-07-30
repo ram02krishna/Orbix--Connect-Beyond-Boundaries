@@ -1,4 +1,4 @@
-# Orbix - Connect Beyond Boundaries
+## Orbix - Connect Beyond Boundaries
 
 Orbix is a full-stack real-time chat application designed to provide seamless and instant communication. Built with a modern tech stack and a beautifully crafted UI using a cohesive **blue color theme**, Orbix delivers a premium user experience featuring secure authentication, rich media sharing, peer-to-peer calling, and real-time messaging.
 
@@ -60,8 +60,6 @@ Orbix/
 │
 └── README.md               # Project documentation
 ```
-
----
 
 ## Getting Started
 
@@ -129,11 +127,3 @@ cd Orbix---Connect-Beyond-Boundaries
 The client will be running on `http://localhost:3000` and the server on `http://localhost:5000`.
 
 ---
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome! 
-
-## License
-
-This project is licensed under the MIT License.
